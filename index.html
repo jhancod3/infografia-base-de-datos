@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía: Modelado Sistema Académico UAC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #003366 0%, #0055a4 100%);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .uac-accent {
+            color: #eab308;
+        }
+
+        .border-uac {
+            border-left: 4px solid #003366;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- Header -->
+    <header class="max-w-6xl mx-auto mb-12 text-center">
+        <div class="inline-block p-2 px-4 mb-4 text-xs font-bold tracking-widest text-white uppercase rounded-full gradient-bg">
+            Ingeniería de Sistemas • Grupo 64 bits
+        </div>
+        <h1 class="text-4xl font-extrabold md:text-5xl text-slate-900">Modelado de Sistema Académico</h1>
+        <p class="mt-4 text-lg text-slate-600">Universidad Andina del Cusco - Proyecto Power Pivot</p>
+    </header>
+
+    <main class="grid max-w-6xl grid-cols-1 gap-8 mx-auto lg:grid-cols-3">
+        
+        <!-- Intro & Team -->
+        <section class="p-6 bg-white shadow-sm lg:col-span-1 rounded-2xl card-hover border-uac">
+            <h2 class="flex items-center mb-4 text-xl font-bold text-slate-800">
+                <i class="mr-2 fas fa-info-circle uac-accent"></i> Introducción
+            </h2>
+            <p class="mb-6 leading-relaxed text-slate-600">
+                Creación de un modelo relacional para la gestión académica universitaria utilizando Excel y Power Pivot para optimizar el análisis de datos.
+            </p>
+            
+            <h3 class="mb-3 text-sm font-bold uppercase text-slate-400">Equipo de Proyecto</h3>
+            <ul class="space-y-3">
+                <li class="flex items-center text-sm font-semibold">
+                    <span class="flex items-center justify-center w-8 h-8 mr-3 text-white rounded-full gradient-bg">T</span>
+                    Richard Triveños (Scrum Master)
+                </li>
+                <li class="flex items-center text-sm">
+                    <span class="flex items-center justify-center w-8 h-8 mr-3 border rounded-full text-slate-400 border-slate-200">Y</span>
+                    Yehan Carlos Surcos
+                </li>
+                <li class="flex items-center text-sm">
+                    <span class="flex items-center justify-center w-8 h-8 mr-3 border rounded-full text-slate-400 border-slate-200">J</span>
+                    Joseph Beder Mariño
+                </li>
+                <li class="flex items-center text-sm">
+                    <span class="flex items-center justify-center w-8 h-8 mr-3 border rounded-full text-slate-400 border-slate-200">P</span>
+                    Paolo Zavaleta
+                </li>
+            </ul>
+        </section>
+
+        <!-- Stats Overview -->
+        <section class="grid grid-cols-2 gap-4 lg:col-span-2">
+            <div class="p-6 bg-blue-50 rounded-2xl card-hover">
+                <div class="text-3xl font-bold text-blue-700">10</div>
+                <div class="text-sm font-medium text-blue-600">Alumnos Registrados</div>
+            </div>
+            <div class="p-6 bg-amber-50 rounded-2xl card-hover">
+                <div class="text-3xl font-bold text-amber-700">06</div>
+                <div class="text-sm font-medium text-amber-600">Docentes Activos</div>
+            </div>
+            <div class="p-6 bg-emerald-50 rounded-2xl card-hover">
+                <div class="text-3xl font-bold text-emerald-700">06</div>
+                <div class="text-sm font-medium text-emerald-600">Asignaturas</div>
+            </div>
+            <div class="p-6 bg-purple-50 rounded-2xl card-hover">
+                <div class="text-3xl font-bold text-purple-700">2025-1</div>
+                <div class="text-sm font-medium text-purple-600">Periodo Académico</div>
+            </div>
+        </section>
+
+        <!-- Relational Model Visualizer -->
+        <section class="p-8 bg-slate-900 lg:col-span-3 rounded-3xl text-slate-200">
+            <h2 class="mb-6 text-2xl font-bold text-white">Esquema del Modelo de Datos</h2>
+            <div class="flex flex-wrap justify-center gap-6 overflow-x-auto">
+                
+                <!-- Table Student -->
+                <div class="w-full p-4 border rounded-xl bg-slate-800 border-slate-700 md:w-56">
+                    <div class="pb-2 mb-2 font-bold border-b border-slate-700 text-uac">Alumnos</div>
+                    <ul class="space-y-1 text-xs text-slate-400">
+                        <li>🔑 CodAlumno</li>
+                        <li>DNI</li>
+                        <li>Nombre</li>
+                        <li>Carrera</li>
+                        <li>Ciclo</li>
+                        <li>🔗 CodNota</li>
+                    </ul>
+                </div>
+
+                <div class="flex items-center text-slate-600"><i class="fas fa-link"></i></div>
+
+                <!-- Table Grades -->
+                <div class="w-full p-4 border border-blue-500 rounded-xl bg-slate-800 md:w-56">
+                    <div class="pb-2 mb-2 font-bold border-b border-slate-700 text-blue-400">Notas (Hechos)</div>
+                    <ul class="space-y-1 text-xs text-slate-400">
+                        <li>🔑 CodNota</li>
+                        <li>🔗 CodAlumno</li>
+                        <li>🔗 CodCarga</li>
+                        <li>Nota1, Nota2</li>
+                        <li>Examen</li>
+                        <li class="font-bold text-blue-300">Promedio</li>
+                    </ul>
+                </div>
+
+                <div class="flex items-center text-slate-600"><i class="fas fa-link"></i></div>
+
+                <!-- Table Course Load -->
+                <div class="w-full p-4 border rounded-xl bg-slate-800 border-slate-700 md:w-56">
+                    <div class="pb-2 mb-2 font-bold border-b border-slate-700 text-emerald-400">Carga Académica</div>
+                    <ul class="space-y-1 text-xs text-slate-400">
+                        <li>🔑 CodCarga</li>
+                        <li>🔗 CodDocente</li>
+                        <li>🔗 CodAsignatura</li>
+                        <li>Periodo</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Data Preview -->
+        <section class="p-6 bg-white shadow-sm lg:col-span-3 rounded-2xl">
+            <div class="flex flex-col items-center justify-between mb-6 md:flex-row">
+                <h2 class="text-xl font-bold text-slate-800">Vista Previa de Datos</h2>
+                <div class="flex mt-4 space-x-2 md:mt-0">
+                    <button onclick="showTable('alumnos')" class="px-4 py-2 text-sm font-medium transition rounded-lg hover:bg-slate-100 text-slate-600">Alumnos</button>
+                    <button onclick="showTable('docentes')" class="px-4 py-2 text-sm font-medium transition rounded-lg hover:bg-slate-100 text-slate-600">Docentes</button>
+                    <button onclick="showTable('notas')" class="px-4 py-2 text-sm font-medium transition rounded-lg hover:bg-slate-100 text-slate-600">Notas</button>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto scroll-container">
+                <table id="dataTable" class="w-full text-left border-collapse">
+                    <thead class="bg-slate-50">
+                        <tr id="tableHead" class="text-xs font-bold uppercase text-slate-500">
+                            <!-- Headers injected by JS -->
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody" class="text-sm text-slate-600">
+                        <!-- Rows injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Conclusions -->
+        <section class="p-8 text-white gradient-bg lg:col-span-3 rounded-3xl">
+            <div class="grid gap-8 md:grid-cols-2">
+                <div>
+                    <h2 class="mb-4 text-2xl font-bold">Conclusiones del Proyecto</h2>
+                    <p class="leading-relaxed opacity-90">
+                        El modelado con Excel y Power Pivot permite una gestión eficiente de los datos académicos para instituciones de nivel superior. Facilita la creación de relaciones complejas y el cálculo de promedios automáticos, aunque para entornos de producción masiva se recomienda escalar a SQL Server o Power BI.
+                    </p>
+                </div>
+                <div class="p-6 bg-white/10 rounded-2xl backdrop-blur-sm">
+                    <h3 class="mb-3 font-bold">Bibliografía Clave</h3>
+                    <ul class="space-y-2 text-sm opacity-80">
+                        <li>• González (2006). Microsoft Excel: herramienta de investigación.</li>
+                        <li>• Ferrari & Russo (2017). Analyzing data with Power BI.</li>
+                        <li>• Collie & Singh (2015). Power Pivot & DAX Guide.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="max-w-6xl py-12 mx-auto text-center text-slate-400">
+        <p>© 2026 Universidad Andina del Cusco • Facultad de Ingeniería y Arquitectura</p>
+    </footer>
+
+    <script>
+        const data = {
+            alumnos: {
+                headers: ["Cod", "Nombre", "Apellido", "Carrera", "Ciclo"],
+                rows: [
+                    ["A001", "Juan", "Pérez", "Sistemas", "3"],
+                    ["A002", "María", "Gómez", "Sistemas", "4"],
+                    ["A003", "Luis", "Ramírez", "Sistemas", "3"],
+                    ["A004", "Ana", "Torres", "Sistemas", "2"],
+                    ["A005", "Carlos", "Rojas", "Sistemas", "4"]
+                ]
+            },
+            docentes: {
+                headers: ["Cod", "Nombre", "Especialidad", "Email"],
+                rows: [
+                    ["0001", "Ana Torres", "Matemática", "ana.torres@uni.edu"],
+                    ["1002", "Pedro Gómez", "Programación", "pedro.gomez@uni.edu"],
+                    ["0003", "Rosa Medina", "Base de Datos", "rosa.medina@uni.edu"],
+                    ["1004", "Jorge Salinas", "Redes", "jorge.salinas@uni.edu"]
+                ]
+            },
+            notas: {
+                headers: ["Alumno", "Nota 1", "Nota 2", "Examen", "Promedio"],
+                rows: [
+                    ["A001", "14", "15", "16", "15"],
+                    ["A002", "16", "17", "18", "17"],
+                    ["A003", "13", "14", "15", "14"],
+                    ["A006", "18", "17", "19", "18"]
+                ]
+            }
+        };
+
+        function showTable(key) {
+            const head = document.getElementById('tableHead');
+            const body = document.getElementById('tableBody');
+            const tableData = data[key];
+
+            // Render Headers
+            head.innerHTML = tableData.headers.map(h => `<th class="p-4">${h}</th>`).join('');
+
+            // Render Rows
+            body.innerHTML = tableData.rows.map(row => `
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                    ${row.map(cell => `<td class="p-4">${cell}</td>`).join('')}
+                </tr>
+            `).join('');
+        }
+
+        // Initialize with students table
+        window.onload = () => showTable('alumnos');
+    </script>
+</body>
+</html>
