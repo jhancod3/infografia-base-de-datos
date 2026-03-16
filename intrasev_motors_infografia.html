@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelo Conceptual BD – Intrasev Motors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --bg: #050a14;
+    --bg2: #0b1524;
+    --bg3: #0f1e35;
+    --card: #0d1e33;
+    --card2: #112240;
+    --accent: #00b4ff;
+    --accent2: #0077cc;
+    --accent3: #00e5ff;
+    --gold: #f0a500;
+    --text: #e8f1fb;
+    --text2: #8ba8c8;
+    --text3: #5a7a9a;
+    --border: rgba(0,180,255,0.18);
+    --border2: rgba(0,180,255,0.08);
+    --glow: 0 0 30px rgba(0,180,255,0.12);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* Grid background */
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(0,180,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,180,255,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events:none; z-index:0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background: rgba(5,10,20,0.88);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border2);
+    padding: 0 2rem;
+    display:flex; align-items:center; justify-content:space-between;
+    height:56px;
+  }
+  .nav-logo {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight:700; font-size:1.1rem;
+    color: var(--accent);
+    display:flex; align-items:center; gap:8px;
+  }
+  .nav-logo i { font-size:1.3rem; }
+  .nav-links { display:flex; gap:1.5rem; }
+  .nav-links a {
+    font-size:0.78rem; font-weight:500;
+    color: var(--text2);
+    text-decoration:none; letter-spacing:0.05em;
+    text-transform:uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── SECTIONS ── */
+  section { position:relative; z-index:1; }
+  .container { max-width:1100px; margin:0 auto; padding:0 1.5rem; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding-top:56px;
+    background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(0,100,180,0.18) 0%, transparent 70%);
+    text-align:center;
+  }
+  .hero-inner { max-width:860px; }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background: rgba(0,180,255,0.08);
+    border: 1px solid var(--border);
+    border-radius:40px; padding:6px 18px;
+    font-size:0.75rem; font-weight:600;
+    color: var(--accent); letter-spacing:0.08em; text-transform:uppercase;
+    margin-bottom:2rem;
+  }
+  .hero-badge i { font-size:0.85rem; }
+  .hero-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight:700; line-height:1.1;
+    margin-bottom:0.6rem;
+  }
+  .hero-title span { color: var(--accent); }
+  .hero-sub {
+    font-size:0.95rem; color: var(--text2);
+    line-height:1.7; margin-bottom:2.5rem;
+  }
+  .hero-sub strong { color: var(--text); font-weight:500; }
+
+  .members-grid {
+    display:grid; grid-template-columns: repeat(2,1fr);
+    gap:10px; max-width:520px; margin:0 auto 2rem;
+  }
+  @media(min-width:600px){ .members-grid { grid-template-columns: repeat(4,1fr); } }
+  .member-card {
+    background: var(--card);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    padding:14px 10px; text-align:center;
+    opacity:0; transform:translateY(20px);
+    transition: all 0.5s ease;
+  }
+  .member-card.visible { opacity:1; transform:translateY(0); }
+  .member-card:hover { border-color: var(--accent); box-shadow: var(--glow); }
+  .member-avatar {
+    width:42px; height:42px; border-radius:50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent3));
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 8px; font-weight:700; font-size:1rem; color:#fff;
+  }
+  .member-name { font-size:0.7rem; font-weight:600; color:var(--text); line-height:1.3; }
+
+  .hero-meta {
+    display:flex; align-items:center; justify-content:center; gap:24px;
+    font-size:0.8rem; color: var(--text3);
+  }
+  .hero-meta span { display:flex; align-items:center; gap:6px; }
+  .hero-meta i { color: var(--accent); }
+
+  .scroll-hint {
+    position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    color: var(--text3); font-size:0.75rem; letter-spacing:0.05em;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+  /* ── SECTION HEADER ── */
+  .sec-label {
+    font-size:0.72rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+    color: var(--accent); display:flex; align-items:center; gap:8px; margin-bottom:0.5rem;
+  }
+  .sec-label::before { content:''; display:block; width:24px; height:2px; background:var(--accent); }
+  .sec-title {
+    font-family:'Rajdhani', sans-serif; font-weight:700;
+    font-size: clamp(1.6rem, 3vw, 2.4rem); line-height:1.15;
+    margin-bottom:0.6rem;
+  }
+  .sec-title span { color: var(--accent); }
+  .sec-desc { color: var(--text2); font-size:0.92rem; max-width:620px; }
+
+  /* ── INTRO ── */
+  #intro { padding:100px 0 80px; }
+  .intro-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:3rem;
+  }
+  @media(max-width:700px){ .intro-grid { grid-template-columns:1fr; } }
+  .intro-card {
+    background: var(--card);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius); padding:28px;
+    opacity:0; transform:translateY(24px); transition:all 0.6s ease;
+  }
+  .intro-card.visible { opacity:1; transform:translateY(0); }
+  .intro-card:hover { border-color:var(--accent); box-shadow:var(--glow); }
+  .intro-card-icon {
+    width:48px; height:48px; border-radius:10px;
+    background: rgba(0,180,255,0.1); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.3rem; color:var(--accent); margin-bottom:1rem;
+  }
+  .intro-card h3 { font-family:'Rajdhani',sans-serif; font-weight:600; font-size:1.1rem; margin-bottom:0.5rem; }
+  .intro-card p { font-size:0.88rem; color:var(--text2); line-height:1.7; }
+  .intro-main {
+    grid-column: span 2;
+    background: linear-gradient(135deg, rgba(0,119,204,0.12), rgba(0,180,255,0.06));
+    border-color: var(--border);
+  }
+  @media(max-width:700px){ .intro-main { grid-column:span 1; } }
+
+  /* ── EMPRESA ── */
+  #empresa { padding:80px 0; background: linear-gradient(180deg, transparent, rgba(0,50,100,0.08), transparent); }
+  .empresa-layout { display:grid; grid-template-columns:1fr 1.4fr; gap:40px; align-items:start; margin-top:3rem; }
+  @media(max-width:750px){ .empresa-layout { grid-template-columns:1fr; } }
+  .empresa-info-card {
+    background:var(--card); border:1px solid var(--border2); border-radius:var(--radius); padding:28px;
+    opacity:0; transform:translateX(-24px); transition:all 0.6s ease;
+  }
+  .empresa-info-card.visible { opacity:1; transform:translateX(0); }
+  .info-row { display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid var(--border2); }
+  .info-row:last-child { border-bottom:none; }
+  .info-icon { width:34px; height:34px; border-radius:8px; background:rgba(0,180,255,0.1); display:flex; align-items:center; justify-content:center; color:var(--accent); font-size:0.9rem; flex-shrink:0; margin-top:2px; }
+  .info-label { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; color:var(--text3); margin-bottom:2px; }
+  .info-value { font-size:0.92rem; font-weight:500; color:var(--text); }
+
+  .marca-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+  .chip {
+    padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:600;
+    background:rgba(0,180,255,0.1); border:1px solid var(--border); color:var(--accent);
+  }
+
+  .empresa-problem {
+    background: var(--card); border:1px solid var(--border2); border-radius:var(--radius); padding:28px;
+    opacity:0; transform:translateX(24px); transition:all 0.6s ease;
+  }
+  .empresa-problem.visible { opacity:1; transform:translateX(0); }
+  .problem-title { font-family:'Rajdhani',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:1rem; color:var(--text); }
+  .problem-point {
+    display:flex; align-items:flex-start; gap:12px; padding:10px 0; border-bottom:1px solid var(--border2);
+  }
+  .problem-point:last-child { border-bottom:none; }
+  .pp-bullet { width:8px; height:8px; border-radius:50%; background:var(--accent); flex-shrink:0; margin-top:6px; }
+  .pp-text { font-size:0.88rem; color:var(--text2); line-height:1.5; }
+  .pp-text strong { color:var(--text); font-weight:500; }
+
+  /* ── REQUERIMIENTOS ── */
+  #req { padding:80px 0; }
+  .req-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; margin-top:3rem; }
+  .req-card {
+    background:var(--card); border:1px solid var(--border2); border-radius:var(--radius); padding:24px;
+    position:relative; overflow:hidden;
+    opacity:0; transform:translateY(20px); transition:all 0.5s ease;
+  }
+  .req-card.visible { opacity:1; transform:translateY(0); }
+  .req-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--accent2),var(--accent3)); }
+  .req-card:hover { border-color:var(--accent); box-shadow:var(--glow); transform:translateY(-4px); }
+  .req-code { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; color:var(--accent); margin-bottom:8px; }
+  .req-title { font-family:'Rajdhani',sans-serif; font-size:1.05rem; font-weight:700; margin-bottom:8px; }
+  .req-desc { font-size:0.85rem; color:var(--text2); line-height:1.6; }
+  .req-icon { position:absolute; right:20px; top:20px; font-size:1.6rem; color:rgba(0,180,255,0.12); }
+
+  /* ── ENTIDADES ── */
+  #entidades { padding:80px 0; background:linear-gradient(180deg,transparent,rgba(0,50,100,0.08),transparent); }
+  .entidades-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:18px; margin-top:3rem; }
+  .entidad-card {
+    background:var(--card); border:1px solid var(--border2); border-radius:var(--radius); padding:20px;
+    opacity:0; transform:scale(0.95); transition:all 0.5s ease;
+    cursor:pointer;
+  }
+  .entidad-card.visible { opacity:1; transform:scale(1); }
+  .entidad-card:hover { border-color:var(--accent); box-shadow:var(--glow); }
+  .entidad-header {
+    display:flex; align-items:center; gap:10px; margin-bottom:14px;
+    padding-bottom:12px; border-bottom:1px solid var(--border2);
+  }
+  .entidad-icon {
+    width:36px; height:36px; border-radius:8px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:1rem;
+  }
+  .ec-purple { background:rgba(120,80,255,0.15); color:#a080ff; }
+  .ec-blue   { background:rgba(0,180,255,0.12); color:var(--accent); }
+  .ec-green  { background:rgba(0,200,120,0.12); color:#00c878; }
+  .ec-gold   { background:rgba(240,165,0,0.12); color:var(--gold); }
+  .ec-coral  { background:rgba(255,100,80,0.12); color:#ff6450; }
+  .entidad-name { font-family:'Rajdhani',sans-serif; font-size:1.05rem; font-weight:700; }
+  .entidad-field {
+    display:flex; align-items:center; gap:8px; padding:5px 0;
+    font-size:0.8rem; color:var(--text2);
+    border-bottom:1px solid var(--border2);
+  }
+  .entidad-field:last-child { border-bottom:none; }
+  .field-dot { width:5px; height:5px; border-radius:50%; background:var(--text3); flex-shrink:0; }
+  .field-pk { background:var(--gold); }
+  .field-fk { background:var(--accent); }
+  .field-badge {
+    margin-left:auto; font-size:0.62rem; font-weight:700; padding:1px 6px;
+    border-radius:3px; letter-spacing:0.05em;
+  }
+  .badge-pk { background:rgba(240,165,0,0.15); color:var(--gold); }
+  .badge-fk { background:rgba(0,180,255,0.12); color:var(--accent); }
+
+  /* ── RELACIONES ── */
+  #relaciones { padding:80px 0; }
+  .rel-container { margin-top:3rem; background:var(--card); border:1px solid var(--border2); border-radius:var(--radius); padding:40px; }
+  .rel-diagram { display:flex; flex-direction:column; gap:0; align-items:center; }
+  .rel-row { display:flex; align-items:center; gap:0; flex-wrap:wrap; justify-content:center; }
+  .rel-box {
+    background:var(--card2); border:1px solid var(--border); border-radius:10px;
+    padding:12px 20px; font-family:'Rajdhani',sans-serif; font-weight:600; font-size:0.95rem;
+    display:flex; align-items:center; gap:8px; white-space:nowrap;
+    opacity:0; transform:scale(0.9); transition:all 0.5s ease;
+  }
+  .rel-box.visible { opacity:1; transform:scale(1); }
+  .rel-box:hover { border-color:var(--accent); box-shadow:var(--glow); }
+  .rb-purple { border-color:rgba(120,80,255,0.3); }
+  .rb-blue   { border-color:rgba(0,180,255,0.3); }
+  .rb-green  { border-color:rgba(0,200,120,0.3); }
+  .rb-gold   { border-color:rgba(240,165,0,0.3); }
+  .rb-coral  { border-color:rgba(255,100,80,0.3); }
+  .rel-arrow {
+    display:flex; flex-direction:column; align-items:center;
+    padding:0 12px; color:var(--text3); font-size:0.7rem;
+    gap:3px; white-space:nowrap;
+  }
+  .arrow-line { display:flex; align-items:center; gap:4px; }
+  .arrow-line::after { content:'→'; color:var(--accent); font-size:1.1rem; }
+  .arrow-label { font-size:0.68rem; color:var(--accent); font-weight:600; letter-spacing:0.05em; }
+
+  .rel-notes { margin-top:28px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media(max-width:600px){ .rel-notes { grid-template-columns:1fr; } }
+  .rel-note {
+    background:rgba(0,180,255,0.04); border:1px solid var(--border2);
+    border-radius:10px; padding:16px;
+    font-size:0.83rem; color:var(--text2); line-height:1.6;
+  }
+  .rel-note strong { color:var(--text); font-weight:500; }
+  .rel-note i { color:var(--accent); margin-right:6px; }
+
+  /* ── TECNOLOGIAS ── */
+  #tech { padding:80px 0; background:linear-gradient(180deg,transparent,rgba(0,50,100,0.08),transparent); }
+  .tech-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:18px; margin-top:3rem; }
+  .tech-card {
+    background:var(--card); border:1px solid var(--border2); border-radius:var(--radius); padding:24px;
+    text-align:center; opacity:0; transform:translateY(20px); transition:all 0.5s ease;
+  }
+  .tech-card.visible { opacity:1; transform:translateY(0); }
+  .tech-card:hover { border-color:var(--accent); box-shadow:var(--glow); transform:translateY(-6px); }
+  .tech-icon { font-size:2.4rem; margin-bottom:12px; }
+  .tech-name { font-family:'Rajdhani',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:6px; }
+  .tech-desc { font-size:0.82rem; color:var(--text2); line-height:1.5; }
+
+  /* ── CONCLUSIÓN ── */
+  #conclusion { padding:80px 0 100px; }
+  .conclusion-card {
+    background: linear-gradient(135deg, rgba(0,100,180,0.14), rgba(0,180,255,0.06));
+    border:1px solid var(--border); border-radius:var(--radius); padding:48px;
+    text-align:center; position:relative; overflow:hidden;
+    opacity:0; transform:translateY(24px); transition:all 0.7s ease;
+  }
+  .conclusion-card.visible { opacity:1; transform:translateY(0); }
+  .conclusion-card::before {
+    content:''; position:absolute; top:-60px; right:-60px;
+    width:200px; height:200px; border-radius:50%;
+    background:rgba(0,180,255,0.06); pointer-events:none;
+  }
+  .conclusion-icon { font-size:3rem; color:var(--accent); margin-bottom:1.5rem; }
+  .conclusion-title { font-family:'Rajdhani',sans-serif; font-size:2rem; font-weight:700; margin-bottom:1rem; }
+  .conclusion-text { font-size:0.95rem; color:var(--text2); line-height:1.8; max-width:700px; margin:0 auto 2rem; }
+  .conclusion-footer { font-size:0.8rem; color:var(--text3); }
+  .conclusion-footer span { color:var(--accent); font-weight:500; }
+
+  /* ── FOOTER ── */
+  footer {
+    background:var(--bg2); border-top:1px solid var(--border2);
+    padding:24px; text-align:center;
+    font-size:0.78rem; color:var(--text3);
+    position:relative; z-index:1;
+  }
+  footer span { color:var(--accent); }
+
+  /* ── DIVIDER ── */
+  .divider { height:1px; background:linear-gradient(90deg,transparent,var(--border),transparent); margin:0; }
+
+  /* ── PROGRESS BAR ── */
+  #progress-bar {
+    position:fixed; top:56px; left:0; height:2px;
+    background:linear-gradient(90deg,var(--accent2),var(--accent3));
+    z-index:200; width:0; transition:width 0.1s linear;
+  }
+
+  /* Animations for stagger */
+  .req-card:nth-child(2){ transition-delay:0.08s; }
+  .req-card:nth-child(3){ transition-delay:0.16s; }
+  .req-card:nth-child(4){ transition-delay:0.24s; }
+  .req-card:nth-child(5){ transition-delay:0.32s; }
+  .entidad-card:nth-child(2){ transition-delay:0.07s; }
+  .entidad-card:nth-child(3){ transition-delay:0.14s; }
+  .entidad-card:nth-child(4){ transition-delay:0.21s; }
+  .entidad-card:nth-child(5){ transition-delay:0.28s; }
+  .member-card:nth-child(2){ transition-delay:0.1s; }
+  .member-card:nth-child(3){ transition-delay:0.2s; }
+  .member-card:nth-child(4){ transition-delay:0.3s; }
+  .tech-card:nth-child(2){ transition-delay:0.07s; }
+  .tech-card:nth-child(3){ transition-delay:0.14s; }
+  .tech-card:nth-child(4){ transition-delay:0.21s; }
+  .tech-card:nth-child(5){ transition-delay:0.28s; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><i class="fa-solid fa-database"></i> Intrasev Motors DB</div>
+  <div class="nav-links">
+    <a href="#intro">Intro</a>
+    <a href="#empresa">Empresa</a>
+    <a href="#req">Requisitos</a>
+    <a href="#entidades">Entidades</a>
+    <a href="#relaciones">Relaciones</a>
+    <a href="#tech">Tecnología</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner container">
+    <div class="hero-badge"><i class="fa-solid fa-microchip"></i> Proyecto Académico · UAC · 2026</div>
+    <h1 class="hero-title">Modelo Conceptual de<br><span>Base de Datos</span></h1>
+    <p class="hero-sub"><strong>Intrasev Motors</strong> · Universidad Andina del Cusco<br>Facultad de Ingeniería y Arquitectura · Escuela de Ingeniería de Sistemas</p>
+
+    <div class="members-grid">
+      <div class="member-card"><div class="member-avatar">RT</div><div class="member-name">Richard Triveños Llaccta</div></div>
+      <div class="member-card"><div class="member-avatar">YS</div><div class="member-name">Yehan Carlos Surcos Alvarez</div></div>
+      <div class="member-card"><div class="member-avatar">JM</div><div class="member-name">Joseph Beder Mariño Chauca</div></div>
+      <div class="member-card"><div class="member-avatar">PZ</div><div class="member-name">Paolo Zavaleta Fuentes</div></div>
+    </div>
+
+    <div class="hero-meta">
+      <span><i class="fa-solid fa-users"></i> Grupo: 64 Bits</span>
+      <span><i class="fa-solid fa-calendar"></i> Año 2026</span>
+      <span><i class="fa-solid fa-location-dot"></i> Cusco, Perú</span>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>Desplazar</span><i class="fa-solid fa-chevron-down"></i></div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INTRO -->
+<section id="intro">
+  <div class="container">
+    <div class="sec-label">01 · Introducción</div>
+    <h2 class="sec-title">Transformación <span>Digital</span></h2>
+    <p class="sec-desc">Organización eficiente de información para decisiones inteligentes.</p>
+
+    <div class="intro-grid">
+      <div class="intro-card intro-main">
+        <div class="intro-card-icon"><i class="fa-solid fa-lightbulb"></i></div>
+        <h3>Visión del Proyecto</h3>
+        <p>La transformación digital es esencial para las empresas modernas. Este proyecto desarrolla el modelo conceptual de una base de datos para <strong style="color:var(--accent)">Intrasev Motors</strong>, con el objetivo de organizar su información de inventario, ventas, clientes y empleados de manera estructurada y eficiente.</p>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+        <h3>Controlar el Inventario</h3>
+        <p>Gestionar motores y repuestos de alta gama con stock actualizado en tiempo real.</p>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon"><i class="fa-solid fa-receipt"></i></div>
+        <h3>Registrar Ventas</h3>
+        <p>Documentar cada transacción vinculando cliente, empleado y productos vendidos.</p>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <h3>Analizar Información</h3>
+        <p>Generar reportes comerciales y métricas clave para evaluar el desempeño del negocio.</p>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-icon"><i class="fa-solid fa-brain"></i></div>
+        <h3>Mejorar Decisiones</h3>
+        <p>Transformar datos en información valiosa que guíe estrategias comerciales.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EMPRESA -->
+<section id="empresa">
+  <div class="container">
+    <div class="sec-label">02 · Contexto</div>
+    <h2 class="sec-title">La <span>Empresa</span></h2>
+    <p class="sec-desc">Especialistas en vehículos de alta gama en el corazón del Cusco.</p>
+
+    <div class="empresa-layout">
+      <div class="empresa-info-card">
+        <div class="info-row">
+          <div class="info-icon"><i class="fa-solid fa-building"></i></div>
+          <div><div class="info-label">Empresa</div><div class="info-value">Intrasev Motors</div></div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+          <div><div class="info-label">Ubicación</div><div class="info-value">Cusco – Perú</div></div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon"><i class="fa-solid fa-gear"></i></div>
+          <div><div class="info-label">Actividad</div><div class="info-value">Comercialización de motores y repuestos para vehículos de alta gama</div></div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon"><i class="fa-solid fa-car"></i></div>
+          <div>
+            <div class="info-label">Marcas Compatibles</div>
+            <div class="marca-chips">
+              <span class="chip">Audi</span>
+              <span class="chip">BMW</span>
+              <span class="chip">Mercedes-Benz</span>
+            </div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon"><i class="fa-solid fa-users"></i></div>
+          <div>
+            <div class="info-label">Clientes Principales</div>
+            <div class="marca-chips">
+              <span class="chip">Talleres especializados</span>
+              <span class="chip">Dueños de vehículos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="empresa-problem">
+        <div class="problem-title"><i class="fa-solid fa-triangle-exclamation" style="color:var(--gold);margin-right:8px"></i>Problema Actual & Solución</div>
+        <div class="problem-point"><div class="pp-bullet"></div><div class="pp-text"><strong>Desorganización:</strong> Sin un sistema estructurado, el inventario de motores y repuestos es difícil de rastrear.</div></div>
+        <div class="problem-point"><div class="pp-bullet"></div><div class="pp-text"><strong>Ventas manuales:</strong> El registro de ventas carece de trazabilidad de empleados y clientes.</div></div>
+        <div class="problem-point"><div class="pp-bullet"></div><div class="pp-text"><strong>Sin análisis:</strong> Imposible generar reportes de rendimiento o stock bajo sin datos centralizados.</div></div>
+        <div class="problem-point" style="border-bottom:none;background:rgba(0,180,255,0.04);border-radius:8px;padding:12px;margin-top:8px">
+          <div class="pp-bullet" style="background:#00c878"></div>
+          <div class="pp-text"><strong style="color:#00c878">Solución:</strong> Un modelo relacional que conecta inventario, ventas, clientes y empleados en una estructura coherente y escalable.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REQUERIMIENTOS -->
+<section id="req">
+  <div class="container">
+    <div class="sec-label">03 · Requerimientos</div>
+    <h2 class="sec-title">Requisitos del <span>Sistema</span></h2>
+    <p class="sec-desc">Lo que el sistema debe hacer para cubrir las necesidades de Intrasev Motors.</p>
+
+    <div class="req-grid">
+      <div class="req-card">
+        <i class="fa-solid fa-warehouse req-icon"></i>
+        <div class="req-code">REQ-01</div>
+        <div class="req-title">Gestión de Inventario</div>
+        <div class="req-desc">El sistema debe almacenar motores y repuestos con precio, categoría y stock actualizado.</div>
+      </div>
+      <div class="req-card">
+        <i class="fa-solid fa-address-card req-icon"></i>
+        <div class="req-code">REQ-02</div>
+        <div class="req-title">Registro de Clientes</div>
+        <div class="req-desc">Guardar DNI/RUC, nombre, teléfono, correo y dirección de cada cliente o empresa.</div>
+      </div>
+      <div class="req-card">
+        <i class="fa-solid fa-id-badge req-icon"></i>
+        <div class="req-code">REQ-03</div>
+        <div class="req-title">Trazabilidad de Empleados</div>
+        <div class="req-desc">Cada venta debe registrar qué empleado la realizó para auditoría y comisiones.</div>
+      </div>
+      <div class="req-card">
+        <i class="fa-solid fa-cash-register req-icon"></i>
+        <div class="req-code">REQ-04</div>
+        <div class="req-title">Control de Ventas</div>
+        <div class="req-desc">Registrar ventas completas con todos los productos incluidos en cada transacción.</div>
+      </div>
+      <div class="req-card">
+        <i class="fa-solid fa-shield-halved req-icon"></i>
+        <div class="req-code">REQ-05</div>
+        <div class="req-title">Reglas del Sistema</div>
+        <div class="req-desc">No permitir ventas con montos negativos o cero. Integridad referencial obligatoria.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ENTIDADES -->
+<section id="entidades">
+  <div class="container">
+    <div class="sec-label">04 · Entidades</div>
+    <h2 class="sec-title">Modelo de <span>Datos</span></h2>
+    <p class="sec-desc">Las 5 entidades del modelo relacional con sus atributos clave.</p>
+
+    <div class="entidades-grid">
+      <!-- CLIENTE -->
+      <div class="entidad-card">
+        <div class="entidad-header">
+          <div class="entidad-icon ec-purple"><i class="fa-solid fa-user"></i></div>
+          <div class="entidad-name">Cliente</div>
+        </div>
+        <div class="entidad-field"><div class="field-dot field-pk"></div>IdCliente<span class="field-badge badge-pk">PK</span></div>
+        <div class="entidad-field"><div class="field-dot"></div>Razón Social / Nombre</div>
+        <div class="entidad-field"><div class="field-dot"></div>DNI / RUC</div>
+        <div class="entidad-field"><div class="field-dot"></div>Teléfono</div>
+        <div class="entidad-field"><div class="field-dot"></div>Correo</div>
+        <div class="entidad-field"><div class="field-dot"></div>Dirección</div>
+      </div>
+
+      <!-- EMPLEADO -->
+      <div class="entidad-card">
+        <div class="entidad-header">
+          <div class="entidad-icon ec-blue"><i class="fa-solid fa-user-tie"></i></div>
+          <div class="entidad-name">Empleado</div>
+        </div>
+        <div class="entidad-field"><div class="field-dot field-pk"></div>IdEmpleado<span class="field-badge badge-pk">PK</span></div>
+        <div class="entidad-field"><div class="field-dot"></div>Nombre Completo</div>
+        <div class="entidad-field"><div class="field-dot"></div>Cargo</div>
+        <div class="entidad-field"><div class="field-dot"></div>Teléfono</div>
+      </div>
+
+      <!-- PRODUCTO -->
+      <div class="entidad-card">
+        <div class="entidad-header">
+          <div class="entidad-icon ec-green"><i class="fa-solid fa-gear"></i></div>
+          <div class="entidad-name">Producto</div>
+        </div>
+        <div class="entidad-field"><div class="field-dot field-pk"></div>IdProducto<span class="field-badge badge-pk">PK</span></div>
+        <div class="entidad-field"><div class="field-dot"></div>Nombre del Producto</div>
+        <div class="entidad-field"><div class="field-dot"></div>Categoría</div>
+        <div class="entidad-field"><div class="field-dot"></div>Marca Compatible</div>
+        <div class="entidad-field"><div class="field-dot"></div>Precio</div>
+        <div class="entidad-field"><div class="field-dot"></div>Stock</div>
+      </div>
+
+      <!-- VENTA -->
+      <div class="entidad-card">
+        <div class="entidad-header">
+          <div class="entidad-icon ec-gold"><i class="fa-solid fa-receipt"></i></div>
+          <div class="entidad-name">Venta</div>
+        </div>
+        <div class="entidad-field"><div class="field-dot field-pk"></div>IdVenta<span class="field-badge badge-pk">PK</span></div>
+        <div class="entidad-field"><div class="field-dot"></div>Fecha</div>
+        <div class="entidad-field"><div class="field-dot"></div>Total</div>
+        <div class="entidad-field"><div class="field-dot field-fk"></div>IdCliente<span class="field-badge badge-fk">FK</span></div>
+        <div class="entidad-field"><div class="field-dot field-fk"></div>IdEmpleado<span class="field-badge badge-fk">FK</span></div>
+      </div>
+
+      <!-- DETALLE VENTA -->
+      <div class="entidad-card">
+        <div class="entidad-header">
+          <div class="entidad-icon ec-coral"><i class="fa-solid fa-list-check"></i></div>
+          <div class="entidad-name">DetalleVenta</div>
+        </div>
+        <div class="entidad-field"><div class="field-dot field-pk"></div>IdDetalle<span class="field-badge badge-pk">PK</span></div>
+        <div class="entidad-field"><div class="field-dot field-fk"></div>IdVenta<span class="field-badge badge-fk">FK</span></div>
+        <div class="entidad-field"><div class="field-dot field-fk"></div>IdProducto<span class="field-badge badge-fk">FK</span></div>
+        <div class="entidad-field"><div class="field-dot"></div>Cantidad</div>
+        <div class="entidad-field"><div class="field-dot"></div>Precio Unitario</div>
+        <div class="entidad-field"><div class="field-dot"></div>Subtotal</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RELACIONES -->
+<section id="relaciones">
+  <div class="container">
+    <div class="sec-label">05 · Relaciones</div>
+    <h2 class="sec-title">Cardinalidades del <span>Modelo</span></h2>
+    <p class="sec-desc">Cómo las entidades se conectan entre sí formando el modelo relacional.</p>
+
+    <div class="rel-container">
+      <div class="rel-diagram">
+        <!-- Row 1 -->
+        <div class="rel-row">
+          <div class="rel-box rb-purple"><i class="fa-solid fa-user" style="color:#a080ff"></i> Cliente</div>
+          <div class="rel-arrow"><div class="arrow-line"></div><div class="arrow-label">1 → N</div></div>
+          <div class="rel-box rb-gold"><i class="fa-solid fa-receipt" style="color:var(--gold)"></i> Venta</div>
+          <div class="rel-arrow"><div class="arrow-line"></div><div class="arrow-label">1 → N</div></div>
+          <div class="rel-box rb-coral"><i class="fa-solid fa-list-check" style="color:#ff6450"></i> DetalleVenta</div>
+          <div class="rel-arrow"><div class="arrow-line"></div><div class="arrow-label">N ← 1</div></div>
+          <div class="rel-box rb-green"><i class="fa-solid fa-gear" style="color:#00c878"></i> Producto</div>
+        </div>
+        <!-- Row 2 / Empleado -->
+        <div style="display:flex;align-items:flex-start;gap:0;margin-top:20px;width:100%;justify-content:center;">
+          <div class="rel-box rb-blue" style="margin-top:0;align-self:flex-start"><i class="fa-solid fa-user-tie" style="color:var(--accent)"></i> Empleado</div>
+          <div class="rel-arrow" style="flex-direction:column;align-items:flex-start;padding-left:16px">
+            <svg width="60" height="50" viewBox="0 0 60 50" fill="none">
+              <path d="M10 10 L10 40 L50 40" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ah)" fill="none"/>
+              <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/></marker></defs>
+            </svg>
+            <span class="arrow-label" style="margin-left:12px">1 → N (Venta)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rel-notes" style="margin-top:32px">
+        <div class="rel-note"><i class="fa-solid fa-link"></i><strong>Cliente → Venta:</strong> Un cliente puede realizar muchas ventas, pero cada venta pertenece a un solo cliente.</div>
+        <div class="rel-note"><i class="fa-solid fa-link"></i><strong>Empleado → Venta:</strong> Un empleado puede gestionar muchas ventas, pero cada venta la atiende un solo empleado.</div>
+        <div class="rel-note"><i class="fa-solid fa-link"></i><strong>Venta → DetalleVenta:</strong> Una venta contiene uno o varios productos detallados en líneas individuales.</div>
+        <div class="rel-note" style="border-color:rgba(255,100,80,0.25);background:rgba(255,100,80,0.04)"><i class="fa-solid fa-star" style="color:#ff6450"></i><strong>Tabla puente:</strong> <em>DetalleVenta</em> resuelve la relación muchos a muchos entre Venta y Producto, permitiendo que una venta tenga varios productos y un producto aparezca en varias ventas.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TECNOLOGIAS -->
+<section id="tech">
+  <div class="container">
+    <div class="sec-label">06 · Tecnologías</div>
+    <h2 class="sec-title">Stack <span>Tecnológico</span></h2>
+    <p class="sec-desc">Herramientas utilizadas para el diseño, desarrollo y presentación del proyecto.</p>
+
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-icon">🗂️</div>
+        <div class="tech-name">Lucidchart</div>
+        <div class="tech-desc">Diseño visual del modelo conceptual y diagrama entidad-relación.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🗄️</div>
+        <div class="tech-name">SQL Server</div>
+        <div class="tech-desc">Motor de base de datos relacional para la creación e implementación del esquema.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">💾</div>
+        <div class="tech-name">SQL (DDL)</div>
+        <div class="tech-desc">Lenguaje de definición de datos para crear tablas, claves y relaciones.</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">🌐</div>
+        <div class="tech-name">HTML + CSS + JS</div>
+        <div class="tech-desc">Desarrollo de esta infografía interactiva para visualización del proyecto.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONCLUSIÓN -->
+<section id="conclusion">
+  <div class="container">
+    <div class="sec-label">07 · Conclusión</div>
+    <h2 class="sec-title">Base para el <span>Futuro Digital</span></h2>
+
+    <div class="conclusion-card">
+      <div class="conclusion-icon"><i class="fa-solid fa-rocket"></i></div>
+      <div class="conclusion-title">Modelo Listo para Escalar</div>
+      <div class="conclusion-text">
+        El modelo conceptual permite organizar eficientemente la información de inventario, clientes y ventas de Intrasev Motors. La estructura relacional evita redundancias, mejora el control de stock y facilita el análisis de datos comerciales.<br><br>
+        Este diseño representa la base sólida para un futuro sistema de gestión empresarial digital, escalable a módulos de facturación, reportes avanzados y analítica de negocio.
+      </div>
+      <div class="conclusion-footer">
+        Proyecto desarrollado por el grupo <span>64 Bits</span> · Universidad Andina del Cusco · <span>2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <strong style="color:var(--text2)">Intrasev Motors</strong> · Modelo Conceptual de Base de Datos · Elaborado por <span>64 Bits</span> · UAC 2026
+</footer>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  });
+
+  // Intersection observer for reveal animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  const animEls = document.querySelectorAll(
+    '.intro-card, .member-card, .empresa-info-card, .empresa-problem, ' +
+    '.req-card, .entidad-card, .rel-box, .tech-card, .conclusion-card'
+  );
+  animEls.forEach(el => observer.observe(el));
+
+  // Hero members on load
+  setTimeout(() => {
+    document.querySelectorAll('.member-card').forEach((c, i) => {
+      setTimeout(() => c.classList.add('visible'), i * 120);
+    });
+  }, 400);
+</script>
+</body>
+</html>
